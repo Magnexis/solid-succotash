@@ -28,7 +28,11 @@ A calm, behavior-informed lost cat search assistant. It turns details about a mi
 
 ## Run locally
 
+Clone the repository and install dependencies:
+
 ```bash
+git clone https://github.com/theworker02/solid-succotash.git
+cd solid-succotash
 npm install
 npm run dev
 ```
