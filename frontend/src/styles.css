@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@theme {
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-display: Georgia, ui-serif, serif;
+  --color-cream: #fbf8f3; --color-ink: #24352f; --color-sage: #769287; --color-moss: #365c50;
+  --color-peach: #eaa884; --color-sun: #f4ce83; --color-line: #e7e0d7;
+}
+@layer base {
+  body { @apply bg-cream text-ink antialiased; background-image: radial-gradient(circle at top right, rgba(234,168,132,.08), transparent 28rem); }
+  button,a { @apply transition-all duration-200; }
+  button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible { @apply outline-2 outline-offset-2 outline-moss; }
+  button:disabled { @apply cursor-not-allowed opacity-60; }
+}
+@layer components {
+  .page-shell { @apply mx-auto w-full max-w-7xl px-5; }
+  .eyebrow { @apply text-xs font-bold uppercase tracking-[.18em] text-peach; }
+  .section-title { @apply font-display text-4xl leading-tight tracking-tight sm:text-5xl; }
+  .helper { @apply mt-2 max-w-2xl text-sm leading-6 text-ink/60; }
+  .input { @apply mt-2 w-full rounded-2xl border border-line bg-white px-4 py-3 font-normal outline-none placeholder:text-ink/35 focus:border-moss focus:ring-4 focus:ring-moss/10; }
+  .pill { @apply inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 text-xs font-bold text-moss shadow-sm; }
+  .card { @apply rounded-[1.5rem] border border-line bg-white shadow-[0_12px_40px_rgba(53,74,66,.06)]; }
+  .soft-panel { @apply rounded-[1.25rem] border border-line/80 bg-[#f7f3ed] p-4; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold; }
+  .btn-primary { @apply inline-flex items-center justify-center gap-2 rounded-full bg-moss px-5 py-3 text-sm font-bold text-white shadow-[0_8px_20px_rgba(54,92,80,.2)] hover:-translate-y-0.5 hover:bg-ink; }
+  .btn-soft { @apply inline-flex items-center justify-center gap-2 rounded-full border border-line bg-white px-5 py-3 text-sm font-bold text-ink hover:-translate-y-0.5 hover:border-sage hover:shadow-sm; }
+  .choice { @apply rounded-2xl border border-line bg-white p-4 text-left text-sm font-semibold hover:border-sage hover:bg-[#f4f8f5]; }
+  .choice-on { @apply border-moss bg-[#edf5f1] text-moss ring-2 ring-moss/10; }
+}
+.map-grid { background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px); background-size: 42px 42px; }
+@media print { header, footer { display: none; } body { background: white; } }

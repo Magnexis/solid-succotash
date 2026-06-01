@@ -1,0 +1,7 @@
+import { MapPin, Phone, Printer, QrCode } from 'lucide-react'
+import { loadSearch, loadToolkit } from '../lib/storage'
+
+export function FlyerPage() {
+  const search = loadSearch(); const toolkit = loadToolkit()
+  return <main className="page-shell py-8"><button onClick={() => window.print()} className="btn-primary print:hidden"><Printer size={16} /> Print flyer</button><article className="mx-auto mt-6 max-w-3xl border-8 border-moss bg-white p-7 text-center shadow-xl print:mt-0 print:border-4 print:shadow-none"><p className="text-6xl font-black tracking-tight text-moss">LOST CAT</p><p className="mt-3 font-display text-4xl">{search?.form.name || 'Please help us search'}</p><div className="mx-auto mt-7 grid size-52 place-items-center rounded-3xl bg-[#eef4f0] text-moss"><QrCode size={110} /><span className="text-xs font-bold">Visit /public-search</span></div><p className="mt-7 flex items-center justify-center gap-2 text-xl font-bold"><MapPin className="text-peach" /> Last seen: {search?.form.location || 'Nearby neighborhood'}</p><p className="mx-auto mt-5 max-w-xl text-lg leading-8">Please check garages, sheds, porches, vehicles, and shrubs. Do not chase. Report sightings with time and direction.</p>{toolkit.contactPhone && <p className="mt-7 flex items-center justify-center gap-2 text-2xl font-black text-moss"><Phone /> {toolkit.contactPhone}</p>}<p className="mt-8 text-sm font-bold text-ink/55">Report an update: {window.location.origin}/sightings</p></article></main>
+}
