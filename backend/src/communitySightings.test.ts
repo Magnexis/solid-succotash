@@ -38,3 +38,27 @@ test('community sighting history preserves all posts and returns filtered summar
   assert.equal(history.reports.length, 1)
   await rm(directory, { recursive: true })
 })
+
+test('community sightings preserve concurrent posts without dropping reports', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'catwoman-concurrent-'))
+  const store = new CommunitySightingStore(join(directory, 'sightings.json'))
+  const count = 32
+
+  await Promise.all(
+    Array.from({ length: count }, (_, index) =>
+      store.create({
+        type: 'sighting',
+        status: 'spotted',
+        description: `Concurrent report ${index}`,
+        locationLabel: `Location ${index}`,
+        latitude: 40,
+        longitude: -75
+      })
+    )
+  )
+
+  const reports = await store.list()
+  assert.equal(reports.length, count)
+  assert.equal(new Set(reports.map((report) => report.id)).size, count)
+  await rm(directory, { recursive: true })
+})
