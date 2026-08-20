@@ -25,6 +25,8 @@ export type CommunitySighting = {
 export type CommunitySightingInput = Omit<CommunitySighting, 'id' | 'reportedAt' | 'distanceMiles'>
 
 export class CommunitySightingStore {
+  private writeQueue: Promise<void> = Promise.resolve()
+
   constructor(private readonly filePath = process.env.CATWOMAN_SIGHTINGS_FILE ?? 'data/community-sightings.json') {}
 
   async list(search?: { latitude?: number; longitude?: number; radiusMiles?: number }) {
@@ -38,12 +40,18 @@ export class CommunitySightingStore {
   }
 
   async create(input: CommunitySightingInput) {
-    const reports = await this.read()
-    const report: CommunitySighting = { ...input, id: randomUUID(), reportedAt: new Date().toISOString() }
-    reports.push(report)
-    await mkdir(dirname(this.filePath), { recursive: true })
-    await writeFile(this.filePath, JSON.stringify(reports, null, 2))
-    return report
+    const operation = this.writeQueue.then(async () => {
+      const reports = await this.read()
+      const report: CommunitySighting = { ...input, id: randomUUID(), reportedAt: new Date().toISOString() }
+      reports.push(report)
+      await mkdir(dirname(this.filePath), { recursive: true })
+      await writeFile(this.filePath, JSON.stringify(reports, null, 2))
+      return report
+    })
+
+    // Keep subsequent writes serialized even if a previous write fails.
+    this.writeQueue = operation.then(() => undefined, () => undefined)
+    return operation
   }
 
   async history(filters?: { type?: string; status?: string; query?: string }) {
